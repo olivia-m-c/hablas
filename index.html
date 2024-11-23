@@ -1,11 +1,30 @@
+<!DOCTYPE html>
+<html lang=""en">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
 <style>
-
+    body {
+        margin: 20px;
+    }
+    #input_sentence {
+        
+        margin-top:20px;
+        
+    }
+    #viewer {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ccc;
+        overflow: auto;
+    }
 </style>
-
 <body>
-
-    <div id="input_sentence"> Read this sentence</div>
+    <h1>Hablas Trial</h1>
+    <div id="input_sentence"> Read this sentence please </div>
     <div id="return_sentence"> this is what you said </div>
+    <input type="file" id="fileInput" accept=".epub"/> 
+    <div id="viewer">epub Viewer</div>
+
     
     <button id="recordButton">Record</button>
     <button id="stopButton">Stop</button>
@@ -20,6 +39,9 @@
         const recordButton = document.getElementById('recordButton');
         const stopButton = document.getElementById('stopButton');
         const returnSentence = document.getElementById('return_sentence');
+        const fileInput = document.getElementById('fileInput');
+        const viewer = document.getElementById('viewer');
+
         let mediaRecorder; 
         let audioChunks = []; //buffer
 
@@ -65,5 +87,28 @@
             mediaRecorder.stop();
             //socket.send(JSON.stringify({ event: 'stop' })); // Notify server that recording has stopped
         });
+
+        fileInput.addEventListener('change', (event) => { //when the file is selected, it triggers the event
+            //file is a fileLIST!! 
+            if (event){
+                console.log(event) 
+            const file = event.target.files[0]; //event is an object (change event triggered when the user selects a file). target=property of the object event. refers to the element that triggered the event
+            console.log(file);
+            if (file) {
+                const book = ePub(file);
+                const rendition = book.renderTo("viewer", { //method to render the book in the specified viewer div
+                    width: "100%", //width of the rendered content to 100% of the width of the viewer element.
+                    height: "100%"
+                });
+                rendition.display();
+            }
+            } else {
+                console.log("event is null");
+            }
+            
+        });
     </script>
 </body>
+
+</html>
+
