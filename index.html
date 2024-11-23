@@ -21,7 +21,7 @@
         const stopButton = document.getElementById('stopButton');
         const returnSentence = document.getElementById('return_sentence');
         let mediaRecorder; 
-        let audioChunks = [];
+        let audioChunks = []; //buffer
 
         const socket = new WebSocket('ws://localhost:8765'); //built-in object. url of our socket (its local in this case)
 
